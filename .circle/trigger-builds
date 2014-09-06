@@ -1,0 +1,24 @@
+#!/bin/sh
+# Copyright 2014 Joukou Ltd
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+if [ $CIRCLE_BRANCH = "master" ] || [ $CIRCLE_BRANCH = "develop" ]; then
+  printf "Triggering builds of dependant repositories\n"
+  curl -X POST https://circleci.com/api/v1/project/joukou/joukou-docker-golang/tree/$CIRCLE_BRANCH?circle-token=$CIRCLE_TOKEN_JOUKOU_DOCKER_GOLANG
+  curl -X POST https://circleci.com/api/v1/project/joukou/joukou-docker-java/tree/$CIRCLE_BRANCH?circle-token=$CIRCLE_TOKEN_JOUKOU_DOCKER_JAVA
+  curl -X POST https://circleci.com/api/v1/project/joukou/joukou-docker-nginx/tree/$CIRCLE_BRANCH?circle-token=$CIRCLE_TOKEN_JOUKOU_DOCKER_NGINX
+  curl -X POST https://circleci.com/api/v1/project/joukou/joukou-docker-nodejs/tree/$CIRCLE_BRANCH?circle-token=$CIRCLE_TOKEN_JOUKOU_DOCKER_NODEJS
+  curl -X POST https://circleci.com/api/v1/project/joukou/joukou-docker-rabbitmq/tree/$CIRCLE_BRANCH?circle-token=$CIRCLE_TOKEN_JOUKOU_DOCKER_RABBITMQ
+else
+  printf "Not trigging builds of dependant repositories\n"
+fi
